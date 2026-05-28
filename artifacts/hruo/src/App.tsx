@@ -2,26 +2,108 @@ import { Switch, Route, Router as WouterRouter } from "wouter";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider } from "@/lib/auth";
+import { ProtectedRoute } from "@/components/layout/protected-route";
+import { TenantLayout } from "@/components/layout/tenant-layout";
+import { SuperAdminLayout } from "@/components/layout/superadmin-layout";
+
 import NotFound from "@/pages/not-found";
+import Landing from "@/pages/public/landing";
+import Login from "@/pages/public/login";
+import RequestQuote from "@/pages/public/request-quote";
 
-const queryClient = new QueryClient();
+// Tenant Pages
+import TenantDashboard from "@/pages/tenant/dashboard";
+import EmployeesList from "@/pages/tenant/employees/index";
+import EmployeeProfile from "@/pages/tenant/employees/[id]";
+import EmployeeForm from "@/pages/tenant/employees/new";
+import LeaveManagement from "@/pages/tenant/leave";
+import Attendance from "@/pages/tenant/attendance";
+import Payroll from "@/pages/tenant/payroll";
+import Recruitment from "@/pages/tenant/recruitment";
+import Expenses from "@/pages/tenant/expenses";
+import Performance from "@/pages/tenant/performance";
+import Training from "@/pages/tenant/training";
+import Documents from "@/pages/tenant/documents";
+import Tasks from "@/pages/tenant/tasks";
+import Discussions from "@/pages/tenant/discussions";
+import Announcements from "@/pages/tenant/announcements";
+import Incidents from "@/pages/tenant/incidents";
+import TaxCalculator from "@/pages/tenant/tax-calculator";
+import Org from "@/pages/tenant/org";
+import Settings from "@/pages/tenant/settings";
+import AIAssistant from "@/pages/tenant/ai-assistant";
 
-function Home() {
-  return (
-    <div className="min-h-screen w-full flex items-center justify-center bg-gray-50">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold text-gray-900">Replit Agent is building...</h1>
-        <p className="mt-2 text-sm text-gray-600">Your app will appear here once it's ready.</p>
-      </div>
-    </div>
-  );
-}
+// Super Admin Pages
+import SuperAdminDashboard from "@/pages/superadmin/dashboard";
+import TenantsList from "@/pages/superadmin/tenants";
+import QuotesList from "@/pages/superadmin/quotes";
+import AuditLogs from "@/pages/superadmin/audit-logs";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
 
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Home} />
-      <Route component={NotFound} />
+      {/* Public Routes */}
+      <Route path="/" component={Landing} />
+      <Route path="/login" component={Login} />
+      <Route path="/request-quote" component={RequestQuote} />
+
+      {/* Super Admin Routes */}
+      <Route path="/superadmin*">
+        <ProtectedRoute requireSuperAdmin>
+          <SuperAdminLayout>
+            <Switch>
+              <Route path="/superadmin" component={SuperAdminDashboard} />
+              <Route path="/superadmin/tenants" component={TenantsList} />
+              <Route path="/superadmin/quotes" component={QuotesList} />
+              <Route path="/superadmin/audit-logs" component={AuditLogs} />
+              <Route component={NotFound} />
+            </Switch>
+          </SuperAdminLayout>
+        </ProtectedRoute>
+      </Route>
+
+      {/* Tenant Routes */}
+      <Route path="/*">
+        <ProtectedRoute>
+          <TenantLayout>
+            <Switch>
+              <Route path="/dashboard" component={TenantDashboard} />
+              
+              <Route path="/employees/new" component={EmployeeForm} />
+              <Route path="/employees/:id" component={EmployeeProfile} />
+              <Route path="/employees" component={EmployeesList} />
+              
+              <Route path="/leave" component={LeaveManagement} />
+              <Route path="/attendance" component={Attendance} />
+              <Route path="/payroll" component={Payroll} />
+              <Route path="/recruitment" component={Recruitment} />
+              <Route path="/expenses" component={Expenses} />
+              <Route path="/performance" component={Performance} />
+              <Route path="/training" component={Training} />
+              <Route path="/documents" component={Documents} />
+              <Route path="/tasks" component={Tasks} />
+              <Route path="/discussions" component={Discussions} />
+              <Route path="/announcements" component={Announcements} />
+              <Route path="/incidents" component={Incidents} />
+              <Route path="/tax-calculator" component={TaxCalculator} />
+              <Route path="/org" component={Org} />
+              <Route path="/settings" component={Settings} />
+              <Route path="/ai-assistant" component={AIAssistant} />
+              <Route component={NotFound} />
+            </Switch>
+          </TenantLayout>
+        </ProtectedRoute>
+      </Route>
     </Switch>
   );
 }
@@ -31,7 +113,9 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-          <Router />
+          <AuthProvider>
+            <Router />
+          </AuthProvider>
         </WouterRouter>
         <Toaster />
       </TooltipProvider>
