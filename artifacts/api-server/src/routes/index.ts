@@ -28,7 +28,7 @@ router.use("/recruitment", recruitmentRouter);
 router.use("/expenses", expensesRouter);
 router.use("/performance", performanceRouter);
 router.use("/training", trainingRouter);
-router.use("/collab", collaborationRouter);
+router.use(collaborationRouter);
 router.use("/analytics", analyticsRouter);
 router.use("/superadmin", superadminRouter);
 router.use("/quotes", quotesRouter);

@@ -2,6 +2,7 @@ import { Router } from "express";
 import { db, tenantsTable, quoteRequestsTable, auditLogsTable } from "@workspace/db";
 import { eq, desc } from "drizzle-orm";
 import { requireSuperAdmin, type AuthRequest } from "../middlewares/auth";
+import { employeesTable } from "@workspace/db";
 
 const router = Router();
 
@@ -32,6 +33,29 @@ router.patch("/tenants/:id", requireSuperAdmin, async (req: AuthRequest, res) =>
 router.get("/audit-logs", requireSuperAdmin, async (req: AuthRequest, res) => {
   const logs = await db.select().from(auditLogsTable).orderBy(desc(auditLogsTable.timestamp)).limit(500);
   res.json(logs.map(l => ({ ...l, timestamp: l.timestamp.toISOString() })));
+});
+
+// Super admin analytics
+router.get("/analytics", requireSuperAdmin, async (req: AuthRequest, res) => {
+  const tenants = await db.select().from(tenantsTable);
+  const quotes = await db.select().from(quoteRequestsTable);
+  const employees = await db.select().from(employeesTable);
+
+  res.json({
+    totalTenants: tenants.length,
+    activeTenants: tenants.filter(t => t.status === "active").length,
+    pendingApprovals: quotes.filter(q => q.status === "new").length,
+    totalRevenue: 0,
+    revenueByMonth: [],
+    tenantsByStatus: [
+      { status: "active",    count: tenants.filter(t => t.status === "active").length },
+      { status: "trial",     count: tenants.filter(t => t.status === "trial").length },
+      { status: "pending",   count: tenants.filter(t => t.status === "pending").length },
+      { status: "suspended", count: tenants.filter(t => t.status === "suspended").length },
+    ],
+    totalEmployees: employees.length,
+    recentActivity: [],
+  });
 });
 
 // Quote requests (also for super admin)
