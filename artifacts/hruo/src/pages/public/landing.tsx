@@ -1,9 +1,38 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Building2, Users, Calendar, Banknote, Briefcase, ChevronRight, ShieldCheck, Zap } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { 
+  Building2, Users, Calendar, Banknote, Briefcase, ChevronRight, ShieldCheck, Zap, 
+  Check, Facebook, Linkedin, Instagram, Youtube, Music, MessageCircle, Globe, ExternalLink, Camera, Play, Link as LinkIcon
+} from "lucide-react";
+import { useState, useEffect } from "react";
 
 export default function Landing() {
+  const [plans, setPlans] = useState<any[]>([]);
+  const [social, setSocial] = useState<any>(null);
+
+  useEffect(() => {
+    fetch("/api/subscriptions/plans")
+      .then(res => res.json())
+      .then(data => setPlans(data.filter((p: any) => p.name !== "Custom")))
+      .catch(() => setPlans([]));
+
+    fetch("/api/settings/social")
+      .then(res => res.json())
+      .then(data => setSocial(data))
+      .catch(() => setSocial(null));
+  }, []);
+
+  const socialLinks = [
+    { id: "facebook", label: "Facebook", icon: Globe, url: social?.facebook },
+    { id: "linkedin", label: "LinkedIn", icon: LinkIcon, url: social?.linkedin },
+    { id: "instagram", label: "Instagram", icon: Camera, url: social?.instagram },
+    { id: "youtube", label: "YouTube", icon: Play, url: social?.youtube },
+    { id: "tiktok", label: "TikTok", icon: Music, url: social?.tiktok },
+    { id: "whatsapp", label: "WhatsApp", icon: MessageCircle, url: social?.whatsapp },
+  ];
+
   return (
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -110,20 +139,88 @@ export default function Landing() {
             </div>
           </div>
         </section>
+
+        <section className="w-full py-24 md:py-32">
+          <div className="container px-4 md:px-6">
+            <div className="text-center space-y-4 mb-12">
+              <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Simple, Transparent Pricing</h2>
+              <p className="text-muted-foreground md:text-lg">Choose the plan that fits your team</p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {plans.map((plan) => (
+                <Card key={plan.id} className={`relative flex flex-col ${plan.isPopular ? "border-primary shadow-lg scale-105" : ""}`}>
+                  {plan.isPopular && (
+                    <Badge className="absolute top-0 right-1/2 translate-x-1/2 -translate-y-1/2 px-3 py-1">
+                      Most Popular
+                    </Badge>
+                  )}
+                  <CardHeader>
+                    <CardTitle className="text-2xl font-bold">{plan.name}</CardTitle>
+                    <div className="mt-4 flex items-baseline gap-1">
+                      <span className="text-4xl font-bold">${plan.priceMonthly}</span>
+                      <span className="text-muted-foreground">/mo</span>
+                    </div>
+                    <CardDescription className="mt-2">
+                      billed annually ${plan.priceYearly}/yr
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="flex-1">
+                    <ul className="space-y-3 text-sm">
+                      {(plan.features || []).slice(0, 6).map((feature: string, i: number) => (
+                        <li key={i} className="flex items-center gap-2">
+                          <Check className="h-4 w-4 text-primary shrink-0" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                  <div className="p-6 pt-0 mt-auto">
+                    <Link href="/request-quote">
+                      <Button className="w-full" variant={plan.isPopular ? "default" : "outline"}>
+                        Get Started
+                      </Button>
+                    </Link>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
 
-      <footer className="w-full border-t py-6 md:py-0">
-        <div className="container flex flex-col md:flex-row items-center justify-between gap-4 md:h-16">
-          <div className="flex items-center gap-2">
-            <img src="/hruo-logo.png" alt="HRUO Logo" className="h-5 opacity-80 grayscale" />
-            <p className="text-sm text-muted-foreground">
-              © 2025 HRUO Enterprise Systems. All rights reserved.
-            </p>
+      <footer className="w-full border-t bg-muted/30">
+        <div className="container py-12 px-4 md:px-6">
+          <div className="flex flex-col items-center justify-center space-y-6 text-center">
+            <h3 className="text-lg font-semibold">Follow Us</h3>
+            <div className="flex flex-wrap justify-center gap-6">
+              {socialLinks.map((link) => {
+                const Icon = link.icon;
+                const hasUrl = !!link.url && link.url !== "";
+                return (
+                  <a
+                    key={link.id}
+                    href={hasUrl ? link.url : "#"}
+                    target={hasUrl ? "_blank" : undefined}
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    <Icon className="h-5 w-5" />
+                    <span>{link.label}</span>
+                  </a>
+                );
+              })}
+            </div>
           </div>
-          <div className="flex gap-4 text-sm text-muted-foreground">
-            <Link href="#" className="hover:underline">Terms</Link>
-            <Link href="#" className="hover:underline">Privacy</Link>
-            <Link href="#" className="hover:underline">Contact</Link>
+          <div className="mt-12 pt-8 border-t flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
+            <div className="flex items-center gap-2">
+              <img src="/hruo-logo.png" alt="HRUO Logo" className="h-5 opacity-80 grayscale" />
+              <p>© 2025 HRUO Enterprise Systems. All rights reserved.</p>
+            </div>
+            <div className="flex gap-6">
+              <Link href="#" className="hover:underline">Terms</Link>
+              <Link href="#" className="hover:underline">Privacy</Link>
+              <Link href="#" className="hover:underline">Contact</Link>
+            </div>
           </div>
         </div>
       </footer>

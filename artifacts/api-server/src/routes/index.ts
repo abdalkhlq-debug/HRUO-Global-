@@ -14,6 +14,10 @@ import collaborationRouter from "./collaboration";
 import analyticsRouter from "./analytics";
 import superadminRouter from "./superadmin";
 import quotesRouter from "./quotes";
+import subscriptionsRouter from "./subscriptions";
+import supportRouter from "./support";
+import settingsRouter from "./settings";
+import aiQuoteRouter from "./ai-quote";
 
 const router: IRouter = Router();
 
@@ -32,5 +36,9 @@ router.use(collaborationRouter);
 router.use("/analytics", analyticsRouter);
 router.use("/superadmin", superadminRouter);
 router.use("/quotes", quotesRouter);
+router.use("/subscriptions", subscriptionsRouter);
+router.use("/support", supportRouter);
+router.use("/settings", settingsRouter);
+router.use("/ai-quote", aiQuoteRouter);
 
 export default router;

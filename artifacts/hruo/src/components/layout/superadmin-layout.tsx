@@ -7,6 +7,10 @@ import {
   Inbox,
   Activity,
   LogOut,
+  CreditCard,
+  Users,
+  HeadphonesIcon,
+  Settings2,
 } from "lucide-react";
 import {
   Sidebar,
@@ -30,10 +34,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const navigation = [
-  { name: "Dashboard", href: "/superadmin", icon: LayoutDashboard },
-  { name: "Tenants", href: "/superadmin/tenants", icon: Building2 },
-  { name: "Quote Requests", href: "/superadmin/quotes", icon: Inbox },
-  { name: "Audit Logs", href: "/superadmin/audit-logs", icon: Activity },
+  { name: "Dashboard",       href: "/superadmin",                  icon: LayoutDashboard },
+  { name: "Tenants",         href: "/superadmin/tenants",          icon: Building2 },
+  { name: "Subscriptions",   href: "/superadmin/subscriptions",    icon: CreditCard },
+  { name: "Users",           href: "/superadmin/users",            icon: Users },
+  { name: "Quote Requests",  href: "/superadmin/quotes",           icon: Inbox },
+  { name: "Support Desk",    href: "/superadmin/support",          icon: HeadphonesIcon },
+  { name: "System Settings", href: "/superadmin/system-settings",  icon: Settings2 },
+  { name: "Audit Logs",      href: "/superadmin/audit-logs",       icon: Activity },
 ];
 
 export function SuperAdminLayout({ children }: { children: ReactNode }) {
@@ -73,9 +81,7 @@ export function SuperAdminLayout({ children }: { children: ReactNode }) {
               <DropdownMenuTrigger asChild>
                 <button className="flex w-full items-center gap-2 rounded-md p-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors">
                   <Avatar className="h-8 w-8">
-                    <AvatarFallback className="bg-primary/10 text-primary text-xs">
-                      SA
-                    </AvatarFallback>
+                    <AvatarFallback className="bg-primary/10 text-primary text-xs">SA</AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col items-start text-sm truncate flex-1">
                     <span className="font-medium truncate w-full">{user?.name || "Super Admin"}</span>
@@ -105,9 +111,7 @@ export function SuperAdminLayout({ children }: { children: ReactNode }) {
             </div>
           </header>
           <main className="flex-1 overflow-y-auto p-4 lg:p-8">
-            <div className="mx-auto max-w-7xl w-full">
-              {children}
-            </div>
+            <div className="mx-auto max-w-7xl w-full">{children}</div>
           </main>
         </div>
       </div>

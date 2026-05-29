@@ -21,7 +21,7 @@ import {
   Settings,
   Bot,
   LogOut,
-  Menu,
+  LifeBuoy,
 } from "lucide-react";
 import {
   Sidebar,
@@ -34,7 +34,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -45,24 +45,25 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const navigation = [
-  { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "Employees", href: "/employees", icon: Users },
-  { name: "Leave", href: "/leave", icon: CalendarDays },
-  { name: "Attendance", href: "/attendance", icon: Clock },
-  { name: "Payroll", href: "/payroll", icon: Banknote },
-  { name: "Recruitment", href: "/recruitment", icon: Briefcase },
-  { name: "Expenses", href: "/expenses", icon: Receipt },
-  { name: "Performance", href: "/performance", icon: Target },
-  { name: "Training", href: "/training", icon: GraduationCap },
-  { name: "Documents", href: "/documents", icon: Files },
-  { name: "Tasks", href: "/tasks", icon: CheckSquare },
-  { name: "Discussions", href: "/discussions", icon: MessageSquare },
-  { name: "Announcements", href: "/announcements", icon: Bell },
-  { name: "Incidents", href: "/incidents", icon: AlertTriangle },
-  { name: "Tax Calculator", href: "/tax-calculator", icon: Calculator },
-  { name: "Org Chart", href: "/org", icon: Network },
-  { name: "AI Assistant", href: "/ai-assistant", icon: Bot },
-  { name: "Settings", href: "/settings", icon: Settings },
+  { name: "Dashboard",     href: "/dashboard",      icon: LayoutDashboard },
+  { name: "Employees",     href: "/employees",      icon: Users },
+  { name: "Leave",         href: "/leave",          icon: CalendarDays },
+  { name: "Attendance",    href: "/attendance",     icon: Clock },
+  { name: "Payroll",       href: "/payroll",        icon: Banknote },
+  { name: "Recruitment",   href: "/recruitment",    icon: Briefcase },
+  { name: "Expenses",      href: "/expenses",       icon: Receipt },
+  { name: "Performance",   href: "/performance",    icon: Target },
+  { name: "Training",      href: "/training",       icon: GraduationCap },
+  { name: "Documents",     href: "/documents",      icon: Files },
+  { name: "Tasks",         href: "/tasks",          icon: CheckSquare },
+  { name: "Discussions",   href: "/discussions",    icon: MessageSquare },
+  { name: "Announcements", href: "/announcements",  icon: Bell },
+  { name: "Incidents",     href: "/incidents",      icon: AlertTriangle },
+  { name: "Tax Calculator",href: "/tax-calculator", icon: Calculator },
+  { name: "Org Chart",     href: "/org",            icon: Network },
+  { name: "AI Assistant",  href: "/ai-assistant",   icon: Bot },
+  { name: "Support",       href: "/support",        icon: LifeBuoy },
+  { name: "Settings",      href: "/settings",       icon: Settings },
 ];
 
 export function TenantLayout({ children }: { children: ReactNode }) {
@@ -136,9 +137,7 @@ export function TenantLayout({ children }: { children: ReactNode }) {
             </div>
           </header>
           <main className="flex-1 overflow-y-auto p-4 lg:p-8">
-            <div className="mx-auto max-w-7xl w-full">
-              {children}
-            </div>
+            <div className="mx-auto max-w-7xl w-full">{children}</div>
           </main>
         </div>
       </div>

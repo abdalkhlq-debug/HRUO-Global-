@@ -12,3 +12,6 @@ export * from "./training";
 export * from "./collaboration";
 export * from "./incidents";
 export * from "./quotes";
+export * from "./subscriptions";
+export * from "./support";
+export * from "./settings";

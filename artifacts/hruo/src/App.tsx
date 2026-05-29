@@ -33,12 +33,17 @@ import TaxCalculator from "@/pages/tenant/tax-calculator";
 import Org from "@/pages/tenant/org";
 import Settings from "@/pages/tenant/settings";
 import AIAssistant from "@/pages/tenant/ai-assistant";
+import TenantSupport from "@/pages/tenant/support";
 
 // Super Admin Pages
 import SuperAdminDashboard from "@/pages/superadmin/dashboard";
 import TenantsList from "@/pages/superadmin/tenants";
 import QuotesList from "@/pages/superadmin/quotes";
 import AuditLogs from "@/pages/superadmin/audit-logs";
+import Subscriptions from "@/pages/superadmin/subscriptions";
+import UserManagement from "@/pages/superadmin/users";
+import SupportDesk from "@/pages/superadmin/support";
+import SystemSettings from "@/pages/superadmin/system-settings";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -66,6 +71,10 @@ function Router() {
               <Route path="/superadmin/tenants" component={TenantsList} />
               <Route path="/superadmin/quotes" component={QuotesList} />
               <Route path="/superadmin/audit-logs" component={AuditLogs} />
+              <Route path="/superadmin/subscriptions" component={Subscriptions} />
+              <Route path="/superadmin/users" component={UserManagement} />
+              <Route path="/superadmin/support" component={SupportDesk} />
+              <Route path="/superadmin/system-settings" component={SystemSettings} />
               <Route component={NotFound} />
             </Switch>
           </SuperAdminLayout>
@@ -78,11 +87,11 @@ function Router() {
           <TenantLayout>
             <Switch>
               <Route path="/dashboard" component={TenantDashboard} />
-              
+
               <Route path="/employees/new" component={EmployeeForm} />
               <Route path="/employees/:id" component={EmployeeProfile} />
               <Route path="/employees" component={EmployeesList} />
-              
+
               <Route path="/leave" component={LeaveManagement} />
               <Route path="/attendance" component={Attendance} />
               <Route path="/payroll" component={Payroll} />
@@ -97,8 +106,9 @@ function Router() {
               <Route path="/incidents" component={Incidents} />
               <Route path="/tax-calculator" component={TaxCalculator} />
               <Route path="/org" component={Org} />
-              <Route path="/settings" component={Settings} />
               <Route path="/ai-assistant" component={AIAssistant} />
+              <Route path="/support" component={TenantSupport} />
+              <Route path="/settings" component={Settings} />
               <Route component={NotFound} />
             </Switch>
           </TenantLayout>
